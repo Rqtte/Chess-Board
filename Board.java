@@ -133,7 +133,7 @@ public class Board extends JFrame{
 
 
 
-        //Declares the right of the Board
+        //Declares the right side of the Board
 
         board_right = new JPanel(new GridLayout(8,1));
 
@@ -155,7 +155,7 @@ public class Board extends JFrame{
 
 
 
-        //Declares the left of the Board
+        //Declares the left side of the Board
 
         board_left = new JPanel(new GridLayout(8,1));
 
