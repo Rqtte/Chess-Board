@@ -1,7 +1,8 @@
 package Pieces;
 
+import javax.swing.JLabel;
 
-abstract public class Piece{
+abstract public class Piece extends JLabel{
     
     String location;  
 
@@ -9,10 +10,11 @@ abstract public class Piece{
 
     }
 
-    public String getLocation() {
-        return location;
-    }
+    //public String getLocation() {
+    //    return location;
+    //}
     public void move(String new_location){
         
     }
+    
 }
