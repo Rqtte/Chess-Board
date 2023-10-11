@@ -55,7 +55,7 @@ public class Board extends JFrame{
 
 
         for(int i=0;i<8;i++){
-            ArrayList<JLabel> temp_ArrayList = new ArrayList<JLabel>();
+            ArrayList<JLabel> temp_ArrayList = new ArrayList<>();
             for(int j=0;j<8;j++){
                 temp_ArrayList.add(new JLabel());
             }
