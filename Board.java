@@ -23,7 +23,7 @@ import java.awt.GridLayout;
 public class Board extends JFrame{
     
     int c;
-    ArrayList<JLabel> squares;
+    ArrayList<ArrayList<JLabel>> squares;
     ArrayList<JLabel> top;
     ArrayList<JLabel> bottom;
     ArrayList<JLabel> right;
@@ -53,28 +53,33 @@ public class Board extends JFrame{
         board_middle.setLayout(new GridLayout(8,8));
         board_middle.setSize(825, 825);
 
-        for(int i = 0;i<64;i++){
-            squares.add(new JLabel());
-        }
-        for(JLabel i:squares){
-            i.setSize(50, 50);
-            
-            if(c==8 || c== 17 || c== 26 || c== 35 || c== 44 || c==53 || c==62 || c == 71){c++;}
 
-            if(c % 2 == 0){
-                i.setBackground(Color.white);
+        for(int i=0;i<8;i++){
+            ArrayList<JLabel> temp_ArrayList = new ArrayList<JLabel>();
+            for(int j=0;j<8;j++){
+                temp_ArrayList.add(new JLabel());
             }
-            else{
-                i.setBackground(new Color(70, 56, 49));
-            }
-            c++;
-
-            i.setVisible(true);
-            i.setOpaque(true);
-            board_middle.add(i);
-
+            squares.add(temp_ArrayList);
         }
-        
+
+        for(ArrayList<JLabel> i:squares){
+            for(JLabel j:i) {
+                j.setSize(50, 50);
+
+                if (c % 2 == 0) {
+                    j.setBackground(new Color(231, 221, 219));
+                } else {
+                    j.setBackground(new Color(59, 46, 42));
+                }
+                c++;
+
+                j.setVisible(true);
+                j.setOpaque(true);
+                board_middle.add(j);
+                }
+                c++;
+            }
+
 
 
 
@@ -199,78 +204,78 @@ public class Board extends JFrame{
 
         //Declares and puts the white pieces (and pawns (who technically are not called pieces (yes I'm a chess nerd, how did you recognize that?))) on the board
 
-        King king_white = new King(true,squares.get(60).getLocation());
+        King king_white = new King(true,squares.get(7).get(4).getLocation());
         board.add(king_white, JLayeredPane.POPUP_LAYER);
-        Queen queen_white = new Queen(true,squares.get(59).getLocation());
+        Queen queen_white = new Queen(true,squares.get(7).get(3).getLocation());
         board.add(queen_white, JLayeredPane.POPUP_LAYER);
-        Rook rook_white_1 = new Rook(true,squares.get(56).getLocation());
+        Rook rook_white_1 = new Rook(true,squares.get(7).get(0).getLocation());
         board.add(rook_white_1, JLayeredPane.POPUP_LAYER);
-        Rook rook_white_2 = new Rook(true,squares.get(63).getLocation());
+        Rook rook_white_2 = new Rook(true,squares.get(7).get(7).getLocation());
         board.add(rook_white_2, JLayeredPane.POPUP_LAYER);
-        Bishop dsqBishop_white = new Bishop(true,squares.get(58).getLocation());
+        Bishop dsqBishop_white = new Bishop(true,squares.get(7).get(2).getLocation());
         board.add(dsqBishop_white,JLayeredPane.POPUP_LAYER);
-        Bishop lsqBishop_white = new Bishop(true,squares.get(61).getLocation());
+        Bishop lsqBishop_white = new Bishop(true,squares.get(7).get(5).getLocation());
         board.add(lsqBishop_white,JLayeredPane.POPUP_LAYER);
-        Knight knight_white_1 = new Knight(true,squares.get(57).getLocation());
+        Knight knight_white_1 = new Knight(true,squares.get(7).get(1).getLocation());
         board.add(knight_white_1,JLayeredPane.POPUP_LAYER);
-        Knight knight_white_2 = new Knight(true,squares.get(62).getLocation());
+        Knight knight_white_2 = new Knight(true,squares.get(7).get(6).getLocation());
         board.add(knight_white_2,JLayeredPane.POPUP_LAYER);
 
         //Declares and puts the white Pawns on the board
 
-        Pawn a_pawn_white = new Pawn(true,squares.get(48).getLocation());
+        Pawn a_pawn_white = new Pawn(true,squares.get(6).get(0).getLocation());
         board.add(a_pawn_white,JLayeredPane.POPUP_LAYER);
-        Pawn b_pawn_white = new Pawn(true,squares.get(49).getLocation());
+        Pawn b_pawn_white = new Pawn(true,squares.get(6).get(1).getLocation());
         board.add(b_pawn_white,JLayeredPane.POPUP_LAYER);
-        Pawn c_pawn_white = new Pawn(true,squares.get(50).getLocation());
+        Pawn c_pawn_white = new Pawn(true,squares.get(6).get(2).getLocation());
         board.add(c_pawn_white,JLayeredPane.POPUP_LAYER);
-        Pawn d_pawn_white = new Pawn(true,squares.get(51).getLocation());
+        Pawn d_pawn_white = new Pawn(true,squares.get(6).get(3).getLocation());
         board.add(d_pawn_white,JLayeredPane.POPUP_LAYER);
-        Pawn e_pawn_white = new Pawn(true,squares.get(52).getLocation());
+        Pawn e_pawn_white = new Pawn(true,squares.get(6).get(4).getLocation());
         board.add(e_pawn_white,JLayeredPane.POPUP_LAYER);
-        Pawn f_pawn_white = new Pawn(true,squares.get(53).getLocation());
+        Pawn f_pawn_white = new Pawn(true,squares.get(6).get(5).getLocation());
         board.add(f_pawn_white,JLayeredPane.POPUP_LAYER);
-        Pawn g_pawn_white = new Pawn(true,squares.get(54).getLocation());
+        Pawn g_pawn_white = new Pawn(true,squares.get(6).get(6).getLocation());
         board.add(g_pawn_white,JLayeredPane.POPUP_LAYER);
-        Pawn h_pawn_white = new Pawn(true,squares.get(55).getLocation());
+        Pawn h_pawn_white = new Pawn(true,squares.get(6).get(7).getLocation());
         board.add(h_pawn_white,JLayeredPane.POPUP_LAYER);
 
         //Declares and puts the black pieces on the board
 
-        King king_black = new King(false,squares.get(4).getLocation());
+        King king_black = new King(false,squares.get(0).get(4).getLocation());
         board.add(king_black, JLayeredPane.POPUP_LAYER);
-        Queen queen_black = new Queen(false,squares.get(3).getLocation());
+        Queen queen_black = new Queen(false,squares.get(0).get(3).getLocation());
         board.add(queen_black, JLayeredPane.POPUP_LAYER);
-        Rook rook_black_1 = new Rook(false,squares.get(0).getLocation());
+        Rook rook_black_1 = new Rook(false,squares.get(0).get(0).getLocation());
         board.add(rook_black_1, JLayeredPane.POPUP_LAYER);
-        Rook rook_black_2 = new Rook(false,squares.get(7).getLocation());
+        Rook rook_black_2 = new Rook(false,squares.get(0).get(7).getLocation());
         board.add(rook_black_2, JLayeredPane.POPUP_LAYER);
-        Bishop dsqBishop_black = new Bishop(false,squares.get(5).getLocation());
+        Bishop dsqBishop_black = new Bishop(false,squares.get(0).get(5).getLocation());
         board.add(dsqBishop_black,JLayeredPane.POPUP_LAYER);
-        Bishop lsqBishop_black = new Bishop(false,squares.get(2).getLocation());
+        Bishop lsqBishop_black = new Bishop(false,squares.get(0).get(2).getLocation());
         board.add(lsqBishop_black,JLayeredPane.POPUP_LAYER);
-        Knight knight_black_1 = new Knight(false,squares.get(1).getLocation());
+        Knight knight_black_1 = new Knight(false,squares.get(0).get(1).getLocation());
         board.add(knight_black_1,JLayeredPane.POPUP_LAYER);
-        Knight knight_black_2 = new Knight(false,squares.get(6).getLocation());
+        Knight knight_black_2 = new Knight(false,squares.get(0).get(6).getLocation());
         board.add(knight_black_2,JLayeredPane.POPUP_LAYER);
 
         //Declares and puts the black Pawns on the board
 
-        Pawn a_pawn_black = new Pawn(false,squares.get(8).getLocation());
+        Pawn a_pawn_black = new Pawn(false,squares.get(1).get(0).getLocation());
         board.add(a_pawn_black,JLayeredPane.POPUP_LAYER);
-        Pawn b_pawn_black = new Pawn(false,squares.get(9).getLocation());
+        Pawn b_pawn_black = new Pawn(false,squares.get(1).get(1).getLocation());
         board.add(b_pawn_black,JLayeredPane.POPUP_LAYER);
-        Pawn c_pawn_black = new Pawn(false,squares.get(10).getLocation());
+        Pawn c_pawn_black = new Pawn(false,squares.get(1).get(2).getLocation());
         board.add(c_pawn_black,JLayeredPane.POPUP_LAYER);
-        Pawn d_pawn_black = new Pawn(false,squares.get(11).getLocation());
+        Pawn d_pawn_black = new Pawn(false,squares.get(1).get(3).getLocation());
         board.add(d_pawn_black,JLayeredPane.POPUP_LAYER);
-        Pawn e_pawn_black = new Pawn(false,squares.get(12).getLocation());
+        Pawn e_pawn_black = new Pawn(false,squares.get(1).get(4).getLocation());
         board.add(e_pawn_black,JLayeredPane.POPUP_LAYER);
-        Pawn f_pawn_black = new Pawn(false,squares.get(13).getLocation());
+        Pawn f_pawn_black = new Pawn(false,squares.get(1).get(5).getLocation());
         board.add(f_pawn_black,JLayeredPane.POPUP_LAYER);
-        Pawn g_pawn_black = new Pawn(false,squares.get(14).getLocation());
+        Pawn g_pawn_black = new Pawn(false,squares.get(1).get(6).getLocation());
         board.add(g_pawn_black,JLayeredPane.POPUP_LAYER);
-        Pawn h_pawn_black = new Pawn(false,squares.get(15).getLocation());
+        Pawn h_pawn_black = new Pawn(false,squares.get(1).get(7).getLocation());
         board.add(h_pawn_black,JLayeredPane.POPUP_LAYER);
 
 
