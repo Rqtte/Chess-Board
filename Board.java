@@ -2,9 +2,14 @@
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import Pieces.*;
+import Pieces.Piece;
+import Pieces.Bishop;
+import Pieces.King;
+import Pieces.Knight;
+import Pieces.Pawn;
+import Pieces.Queen;
+import Pieces.Rook;
 
-import java.lang.Math;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -308,7 +313,7 @@ public class Board extends JFrame implements MouseListener {
         }
         else{
             selected_Piece.setLocation(e.getComponent().getLocation());
-
+            selected_Piece = null;
 
         }
         System.out.println(selected_Piece);
