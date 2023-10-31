@@ -1,10 +1,11 @@
 package Pieces;
 
 import javax.swing.JLabel;
+import java.awt.*;
 
 abstract public class Piece extends JLabel{
     
-    String location;  
+    Point point;
 
     Piece(){
 
@@ -13,8 +14,11 @@ abstract public class Piece extends JLabel{
     //public String getLocation() {
     //    return location;
     //}
-    public void move(String new_location){
-        
+    public void move(Point point){
+        this.point = point;
     }
-    
+
+    public void setPoint(Point point) {
+        this.point = point;
+    }
 }
