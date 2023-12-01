@@ -7,8 +7,11 @@ public class Knight extends Piece {
 
     ImageIcon knight_white;
     ImageIcon knight_black;
+    boolean whit;
 
     public Knight(boolean white,Point point){
+
+        whit = white;
 
         knight_white = new ImageIcon("Pieces/ImageIcons/Knight_White.png");
         Image kw = knight_white.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
@@ -33,5 +36,8 @@ public class Knight extends Piece {
 
     }
 
+    public boolean getcolour(){
+        return(whit);
+    }
 }
 

@@ -6,6 +6,7 @@ import java.awt.*;
 abstract public class Piece extends JLabel{
     
     Point point;
+    boolean whit;
 
     Piece(){
 
@@ -20,5 +21,9 @@ abstract public class Piece extends JLabel{
 
     public void setPoint(Point point) {
         this.point = point;
+    }
+
+    public boolean getcolour(){
+        return(whit);
     }
 }

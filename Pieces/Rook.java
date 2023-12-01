@@ -7,9 +7,13 @@ public class Rook extends Piece {
 
     ImageIcon rook_white;
     ImageIcon rook_black;
+    boolean whit;
 
     public Rook(boolean white,Point point){
-    rook_white = new ImageIcon("Pieces/ImageIcons/Rook_White.png");
+
+        whit = white;
+
+        rook_white = new ImageIcon("Pieces/ImageIcons/Rook_White.png");
         Image rw = rook_white.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
         rook_white = new ImageIcon(rw);
 
@@ -30,5 +34,7 @@ public class Rook extends Piece {
         this.setLocation(point);
 
     }
-
+    public boolean getcolour(){
+        return(whit);
+    }
 }

@@ -10,6 +10,7 @@ import Pieces.Pawn;
 import Pieces.Queen;
 import Pieces.Rook;
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -23,8 +24,8 @@ public class Board extends JFrame implements MouseListener {
 
     int c;
     ArrayList<Piece> Piece_List;
-    ArrayList<ArrayList<JLabel>> squares;
-    ArrayList<JLabel> squares2;
+    ArrayList<ArrayList<Square>> squares;
+    ArrayList<Square> squares2;
     ArrayList<JLabel> top;
     ArrayList<JLabel> bottom;
     ArrayList<JLabel> right;
@@ -60,29 +61,22 @@ public class Board extends JFrame implements MouseListener {
 
 
         for(int i=0;i<8;i++){
-            ArrayList<JLabel> temp_ArrayList = new ArrayList<>();
+            ArrayList<Square> temp_ArrayList = new ArrayList<>();
             for(int j=0;j<8;j++){
-                JLabel templabel = new JLabel();
-                squares2.add(templabel);
-                temp_ArrayList.add(templabel);
+                Square tempsquare = new Square();
+                squares2.add(tempsquare);
+                temp_ArrayList.add(tempsquare);
             }
             squares.add(temp_ArrayList);
         }
 
-        for(ArrayList<JLabel> i:squares){
-            for(JLabel j:i) {
-                j.setSize(50, 50);
+        for(ArrayList<Square> i:squares){
+            for(Square j:i) {
 
-                if (c % 2 == 0) {
-                    j.setBackground(new Color(231, 221, 219));
-                } else {
-                    j.setBackground(new Color(59, 46, 42));
-                }
+                j.setColor(c % 2 == 0);
                 c++;
 
                 j.addMouseListener(this);
-                j.setVisible(true);
-                j.setOpaque(true);
                 board_middle.add(j);
                 }
                 c++;
@@ -303,9 +297,24 @@ public class Board extends JFrame implements MouseListener {
 //!squares.contains(e.getComponent())
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(!squares2.contains(e.getComponent())){
-            if(selected_Piece != e.getComponent()){
-                selected_Piece = e.getComponent();
+        if(e.getComponent() instanceof Piece){
+            if(selected_Piece != e.getComponent()) {
+                if (selected_Piece == null) {
+                    selected_Piece = e.getComponent();}
+                else {
+                    if(((Piece) selected_Piece).getcolour() != (((Piece) e.getComponent()).getcolour())){
+                        System.out.println(((Piece) selected_Piece).getcolour() + "|||||||" +(((Piece) e.getComponent()).getcolour()) );
+
+                        
+                        selected_Piece.setLocation(e.getComponent().getLocation());
+                        e.getComponent().setVisible(false);
+                        selected_Piece = null;
+
+                    }
+                    else{
+                        selected_Piece = e.getComponent();
+                    }
+                }
             }
             else{
                 selected_Piece = null;

@@ -7,8 +7,11 @@ public class Pawn extends Piece {
 
     ImageIcon pawn_white;
     ImageIcon pawn_black;
+    boolean whit;
 
     public Pawn(boolean white,Point point){
+
+        whit = white;
 
         pawn_white = new ImageIcon("Pieces/ImageIcons/Pawn_White.png");
         Image pw = pawn_white.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
@@ -32,5 +35,8 @@ public class Pawn extends Piece {
 
     }
 
+    public boolean getcolour(){
+        return(whit);
+    }
 }
 

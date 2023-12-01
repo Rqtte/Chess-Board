@@ -11,11 +11,12 @@ public class Bishop extends Piece {
 
     ImageIcon bishop_white;
     ImageIcon bishop_black;
-    
+    boolean whit;
+
 
     public Bishop(boolean white, Point point){
 
-
+        whit = white;
 
         bishop_white = new ImageIcon("Pieces/ImageIcons/Bishop_White.png");
         Image bw = bishop_white.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
@@ -30,14 +31,17 @@ public class Bishop extends Piece {
         }
         else{
             this.setIcon(bishop_black);//
-            }
-        
+        }
+
         this.setVisible(true);
         this.setSize(103,103);
         this.setOpaque(false);
         this.setLocation(point);
-    
-        }
 
-        
+    }
+
+    public boolean getcolour(){
+        return(whit);
+    }
+
 }

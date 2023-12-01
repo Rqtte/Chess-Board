@@ -7,8 +7,10 @@ public class Queen extends Piece {
 
     ImageIcon queen_white;
     ImageIcon queen_black;
+    boolean whit;
 
     public Queen(boolean white, Point point){
+        whit = white;
 
         queen_white = new ImageIcon("Pieces/ImageIcons/Queen_White.png");
         Image qw = queen_white.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
@@ -30,6 +32,9 @@ public class Queen extends Piece {
         this.setOpaque(false);
         this.setLocation(point);
 
+    }
+    public boolean getcolour(){
+        return(whit);
     }
 }
 
