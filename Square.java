@@ -25,4 +25,9 @@ public class Square extends JLabel {
             this.setBackground(new Color(59, 46, 42));
         }
     }
+
+
+
 }
+
+
