@@ -4,7 +4,8 @@ import javax.swing.JLabel;
 import java.awt.*;
 
 abstract public class Piece extends JLabel{
-    
+
+
     Point point;
     boolean whit;
 
@@ -26,4 +27,6 @@ abstract public class Piece extends JLabel{
     public boolean getcolour(){
         return(whit);
     }
+
+
 }

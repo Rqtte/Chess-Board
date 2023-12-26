@@ -8,9 +8,11 @@ public class King extends Piece {
     ImageIcon king_white;
     ImageIcon king_black;
     boolean whit;
+    boolean moved;
 
      public King(boolean white,Point point){
          whit = white;
+         moved = false;
 
         king_white = new ImageIcon("Pieces/ImageIcons/King_White.png");
         Image kw = king_white.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
@@ -40,6 +42,12 @@ public class King extends Piece {
     //    this.point = point;
     public boolean getcolour(){
         return(whit);
+    }
+    public void Moved(){
+        moved = true;
+    }
+    public boolean getMoved(){
+        return moved;
     }
 
 }
