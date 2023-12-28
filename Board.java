@@ -1602,6 +1602,169 @@ public class Board extends JFrame implements MouseListener {
 
     }
 
+
+    public boolean analyzeFutureKnightMoves(Piece piece, Piece piece_to_be_moved, int destination_index, int destination_array){
+        boolean safe = true;
+
+        if (getIndex(piece) == destination_index && getArray(piece) == destination_array) {
+            return safe;
+        }
+
+        if (getArray(piece) + 2 < 8 && getIndex(piece) - 1 > -1) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) + 2).get(getIndex(piece) - 1).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+        if (getArray(piece) + 2 < 8 && getIndex(piece) + 1 < 8) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) + 2).get(getIndex(piece) + 1).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (getArray(piece) + 1 < 8 && getIndex(piece) + 2 < 8) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) + 1).get(getIndex(piece) + 2).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (getArray(piece) + 1 < 8 && getIndex(piece) - 2 > -1) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) + 1).get(getIndex(piece) - 2).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+        if (getArray(piece) - 2 > -1 && getIndex(piece) - 1 > -1) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) - 2).get(getIndex(piece) - 1).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+        if (getArray(piece) - 2 > -1 && getIndex(piece) + 1 < 8) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) - 2).get(getIndex(piece) + 1).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (getArray(piece) - 1 > -1 && getIndex(piece) + 2 < 8) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) - 1).get(getIndex(piece) + 2).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (getArray(piece) - 1 > -1 && getIndex(piece) - 2 > -1) {
+            for (Piece j : Piece_List) {
+                if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) - 1).get(getIndex(piece) - 2).getLocation().toString())) {
+                    if (piece.getcolour() != j.getcolour() && j instanceof King ) {
+                        safe = false;
+                        return safe;
+                    }
+                    break;
+                }
+            }
+        }
+
+
+        return safe;
+    }
+    public boolean analyzeFuturePawnMoves(Piece piece, Piece piece_to_be_moved, int destination_index, int destination_array) {
+        boolean safe = true;
+
+        if (getIndex(piece) == destination_index && getArray(piece) == destination_array) {
+            return safe;
+        }
+
+        if (piece.getcolour()) {
+            if (getArray(piece) - 1 != -1 && getIndex(piece) - 1 != -1) {
+                for (Piece j : Piece_List) {
+                    if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) - 1).get(getIndex(piece) - 1).getLocation().toString())) {
+                        if (j.getcolour() != piece.getcolour() && j instanceof King) {
+                            safe = false;
+                            return safe;
+                        }
+                    }
+                }
+            }
+            if (getArray(piece) - 1 != -1 && getIndex(piece) + 1 != 8) {
+                for (Piece j : Piece_List) {
+                    if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) - 1).get(getIndex(piece) + 1).getLocation().toString())) {
+                        if (j.getcolour() != piece.getcolour() && j instanceof King) {
+                            safe = false;
+                            return safe;
+                        }
+                    }
+                }
+            }
+        }
+
+        //diagonal captures is pawn is black
+
+        if (!piece.getcolour()) {
+            if (getArray(piece) + 1 != 8 && getIndex(piece) - 1 != -1) {
+                for (Piece j : Piece_List) {
+                    if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) + 1).get(getIndex(piece) - 1).getLocation().toString())) {
+                        if (j.getcolour() != piece.getcolour() && j instanceof King) {
+                            safe = false;
+                            return safe;
+                        }
+                    }
+                }
+            }
+            if (getArray(piece) + 1 != 8 && getIndex(piece) + 1 != 8) {
+                for (Piece j : Piece_List) {
+                    if (Objects.equals(j.getLocation().toString(), squares.get(getArray(piece) + 1).get(getIndex(piece) + 1).getLocation().toString())) {
+                        if (j.getcolour() != piece.getcolour() && j instanceof King) {
+                            safe = false;
+                            return safe;
+                        }
+                    }
+                }
+            }
+        }
+
+        return safe;
+    }
+
+
     public boolean analyze_future_moves(Piece piece, int origin_index, int origin_array, int destination_index, int destination_array) {
         boolean safe = true;
         if (Turn_w) {
@@ -1625,6 +1788,20 @@ public class Board extends JFrame implements MouseListener {
                             return safe;
                         }
                         if (!analyze_diagonal_future_moves(i, piece, destination_index, destination_array)) {
+                            safe = false;
+                            return safe;
+                        }
+                    }
+
+                    if (i instanceof Knight) {
+                        if (!analyzeFutureKnightMoves(i, piece, destination_index, destination_array)) {
+                            safe = false;
+                            return safe;
+                        }
+                    }
+
+                    if(i instanceof  Pawn){
+                        if (!analyzeFuturePawnMoves(i, piece, destination_index, destination_array)) {
                             safe = false;
                             return safe;
                         }
@@ -1692,6 +1869,7 @@ public class Board extends JFrame implements MouseListener {
 
             }
 
+
             if (p_got_taken) {
                 piece.setVisible(false);
                 Piece_List.remove(piece);
@@ -1725,11 +1903,12 @@ public class Board extends JFrame implements MouseListener {
                     CheckPinsBlocks();
                     Check_for_Checks();
 
-            } else {
-
-                selected_Piece = piece;
-
             }
+        }
+        else {
+
+            selected_Piece = piece;
+
         }
     }
         public void move(Square square){
