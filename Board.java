@@ -51,6 +51,10 @@ public class Board extends JFrame implements MouseListener {
     Boolean CastlingPossible;
     ArrayList<Pawn> EnPassantables;
     ArrayList<Pawn> NoLongerEnPassantable;
+    int FiftyMoveDrawCount;
+    boolean ColourWithWhichFiftyMoveCountReset;
+    ArrayList<String> ReachedPositions;
+    ArrayList<Integer> NumberOfTimesPositionWasReached;
 
     Board() {
 
@@ -59,6 +63,9 @@ public class Board extends JFrame implements MouseListener {
 
         //Declares the center of the board
 
+        ReachedPositions = new ArrayList<>();
+        NumberOfTimesPositionWasReached = new ArrayList<>();
+        ColourWithWhichFiftyMoveCountReset = true;
         EnPassantables = new ArrayList<>();
         NoLongerEnPassantable = new ArrayList<>();
         CastlingPossible = false;
@@ -73,6 +80,7 @@ public class Board extends JFrame implements MouseListener {
         board_middle.setSize(825, 825);
         Turn_w = true;
         Check = false;
+        FiftyMoveDrawCount = 0;
 
 
         for (int i = 0; i < 8; i++) {
@@ -305,6 +313,7 @@ public class Board extends JFrame implements MouseListener {
         }
 
         legal_moves = analyze_legal_moves(false);
+        ProcessFEN();
     }
 
     public int getArray(Piece piece) {
@@ -360,6 +369,128 @@ public class Board extends JFrame implements MouseListener {
         return (index);
     }
 
+    public Piece getPieceOnSquare(int Array, int Index){
+        for(Piece i:Piece_List){
+            if(i.isVisible()) {
+                if (getArray(i) == Array && getIndex(i) == Index){
+                    return i;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getFEN(){
+        String FEN = "";
+        int BlankSquares = 0;
+
+        for(int i=0;i<squares.size();i++){
+            if(i!=0){
+                FEN = FEN+"/";
+            }
+            for(int j=0;j<squares.get(i).size();j++){
+                if(getPieceOnSquare(i,j) == null){
+                    BlankSquares++;
+                }
+                else{
+                    if(BlankSquares !=0) {
+                        FEN = FEN + BlankSquares;
+                        BlankSquares = 0;
+                    }
+
+
+                    if(getPieceOnSquare(i,j) instanceof Pawn){
+                        if(getPieceOnSquare(i,j).getcolour()){
+                            FEN=FEN+"P";
+                        }
+                        else{
+                            FEN=FEN+"p";
+                        }
+                    }
+
+                    if(getPieceOnSquare(i,j) instanceof King){
+                        if(getPieceOnSquare(i,j).getcolour()){
+                            FEN=FEN+"K";
+                        }
+                        else{
+                            FEN=FEN+"k";
+                        }
+                    }
+
+                    if(getPieceOnSquare(i,j) instanceof Queen){
+                        if(getPieceOnSquare(i,j).getcolour()){
+                            FEN=FEN+"Q";
+                        }
+                        else{
+                            FEN=FEN+"q";
+                        }
+                    }
+                    if(getPieceOnSquare(i,j) instanceof Rook){
+                        if(getPieceOnSquare(i,j).getcolour()){
+                            FEN=FEN+"R";
+                        }
+                        else{
+                            FEN=FEN+"r";
+                        }
+                    }
+
+                    if(getPieceOnSquare(i,j) instanceof Knight){
+                        if(getPieceOnSquare(i,j).getcolour()){
+                            FEN=FEN+"N";
+                        }
+                        else{
+                            FEN=FEN+"n";
+                        }
+                    }
+
+                    if(getPieceOnSquare(i,j) instanceof Bishop){
+                        if(getPieceOnSquare(i,j).getcolour()){
+                            FEN=FEN+"B";
+                        }
+                        else{
+                            FEN=FEN+"b";
+                        }
+                    }
+
+
+
+                }
+
+            }
+            if(BlankSquares != 0){
+                FEN = FEN + BlankSquares;
+                BlankSquares = 0;
+            }
+
+
+
+        }
+
+        if(Turn_w){
+            FEN = FEN + " w";
+
+        }
+
+        else{
+            FEN = FEN + " b";
+        }
+
+        return FEN;
+    }
+
+    public void ProcessFEN(){
+        String FEN = getFEN();
+        if(ReachedPositions.contains(FEN)){
+            NumberOfTimesPositionWasReached.set(ReachedPositions.indexOf(FEN),NumberOfTimesPositionWasReached.get(ReachedPositions.indexOf(FEN)) + 1);
+            if(NumberOfTimesPositionWasReached.get(ReachedPositions.indexOf(FEN)) == 3){
+                ThreefoldRepetition();
+            }
+        }
+        else {
+            ReachedPositions.add(FEN);
+            NumberOfTimesPositionWasReached.add(1);
+        }
+    }
     public void CheckPinsBlocks() {
         if (Turn_w) {
             for (Piece i : Piece_List_W) {
@@ -474,6 +605,12 @@ public class Board extends JFrame implements MouseListener {
 
     public void Stalemate() {
         System.out.println("Stalemate");
+    }
+    public void FiftyMoveDraw(){
+        System.out.println("50 Move Draw");
+    }
+    public void ThreefoldRepetition(){
+        System.out.println("Threefold repetition");
     }
 
     public ArrayList<Square> analyze_straight_moves(Piece piece, Boolean prot) {
@@ -1558,6 +1695,10 @@ public class Board extends JFrame implements MouseListener {
             if (p_got_taken) {
                 piece.setVisible(false);
                 Piece_List.remove(piece);
+
+                FiftyMoveDrawCount = 0;
+                ColourWithWhichFiftyMoveCountReset = Turn_w;
+
                 if (selected_Piece instanceof King) {
                     ((King) selected_Piece).Moved();
                 }
@@ -1650,6 +1791,17 @@ public class Board extends JFrame implements MouseListener {
                     }
                 }
 
+                if(selected_Piece instanceof Pawn){
+                    FiftyMoveDrawCount = 0;
+                    ColourWithWhichFiftyMoveCountReset = Turn_w;
+                }
+                else{
+                    if(ColourWithWhichFiftyMoveCountReset == Turn_w){
+                        FiftyMoveDrawCount++;
+                    }
+
+                }
+
                 if (!EnPassantables.isEmpty()) {
                     NoLongerEnPassantable.addAll(EnPassantables);
                     EnPassantables.clear();
@@ -1675,6 +1827,7 @@ public class Board extends JFrame implements MouseListener {
                 selected_Piece = null;
                 CastlingPossible = false;
                 Turn_w = !Turn_w;
+                ProcessFEN();
                 legal_moves = analyze_legal_moves(false);
                 CheckPinsBlocks();
                 Check_for_Checks();
@@ -1722,6 +1875,10 @@ public class Board extends JFrame implements MouseListener {
 
 
         }
+        if(FiftyMoveDrawCount == 50){
+            FiftyMoveDraw();
+        }
+
         System.out.println(selected_Piece);
 
 
@@ -1737,4 +1894,5 @@ public class Board extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
 }
