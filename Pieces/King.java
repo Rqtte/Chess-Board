@@ -7,6 +7,9 @@ public class King extends Piece {
 
     ImageIcon king_white;
     ImageIcon king_black;
+    ImageIcon king_white_check;
+    ImageIcon king_black_check;
+
     boolean whit;
     boolean moved;
 
@@ -21,6 +24,14 @@ public class King extends Piece {
         king_black = new ImageIcon("Pieces/ImageIcons/King_Black.png");
         Image kb = king_black.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
         king_black = new ImageIcon(kb);
+
+        king_white_check = new ImageIcon("Pieces/ImageIcons/King_Check_White.png");
+        Image kwc = king_white_check.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
+        king_white_check = new ImageIcon(kwc);
+
+        king_black_check = new ImageIcon("Pieces/ImageIcons/King_Check_Black.png");
+        Image kbc = king_black_check.getImage().getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
+        king_black_check = new ImageIcon(kbc);
 
         if(white){
             this.setIcon(king_white);
@@ -48,6 +59,27 @@ public class King extends Piece {
     }
     public boolean getMoved(){
         return moved;
+    }
+
+    public void setCheck(boolean check){
+         if(check){
+             if(whit){
+                 this.setIcon(king_white_check);
+             }
+             if(!whit){
+                 this.setIcon(king_black_check);
+             }
+         }
+
+         if(!check){
+             if(whit){
+                 this.setIcon(king_white);
+             }
+             if(!whit){
+                 this.setIcon(king_black);
+             }
+         }
+
     }
 
 }
