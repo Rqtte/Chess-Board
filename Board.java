@@ -54,6 +54,8 @@ public class Board extends JFrame implements MouseListener {
     ArrayList<Integer> NumberOfTimesPositionWasReached;
     PromotionMenu PromotionMenu;
     Piece PromotedPiece;
+    King KingW;
+    King KingB;
 
     Board() {
 
@@ -123,13 +125,7 @@ public class Board extends JFrame implements MouseListener {
             i.setHorizontalAlignment(SwingConstants.CENTER);
             i.setVerticalAlignment(SwingConstants.CENTER);
             i.setFont(new Font("Serif", Font.PLAIN, 14));
-            //i.setBackground(new Color(71, 42, 32));
         }
-
-        //fill1.setSize(20,20);
-        //top.add(0,fill1);
-        //fill2.setSize(10,20);
-        //top.add(fill2);
 
         for (JLabel i : top) {
             board_top.add(i);
@@ -154,7 +150,6 @@ public class Board extends JFrame implements MouseListener {
             i.setVerticalAlignment(SwingConstants.CENTER);
             i.setFont(new Font("Serif", Font.PLAIN, 14));
             i.setOpaque(true);
-            //i.setBackground(new Color(82, 46, 34, 255));
         }
 
         for (JLabel i : bottom) {
@@ -162,7 +157,6 @@ public class Board extends JFrame implements MouseListener {
         }
 
 
-        //board_bottom.add(fill4);
 
         //Declares the right side of the Board
 
@@ -179,7 +173,6 @@ public class Board extends JFrame implements MouseListener {
             i.setSize(20, 50);
             i.setText(numbers[right.indexOf(i)]);
             i.setFont(new Font("Serif", Font.PLAIN, 14));
-            //i.setBackground(new Color(71, 42, 32));
             board_right.add(i);
         }
 
@@ -220,10 +213,10 @@ public class Board extends JFrame implements MouseListener {
         this.setVisible(true);
 
 
-        //Declares and puts the white pieces (and pawns (who technically are not called pieces (yes I'm a chess nerd, how did you recognize that?))) in the Piece List
+        //Declares and puts the white pieces (and pawns (who technically are not called pieces (yes I'm a chess nerd, how did you notice that?))) in the Piece List
 
-        King king_white = new King(true, squares.get(7).get(4).getLocation());
-        Piece_List.add(king_white);
+        KingW = new King(true, squares.get(7).get(4).getLocation());
+        Piece_List.add(KingW);
         Queen queen_white = new Queen(true, squares.get(7).get(3).getLocation());
         Piece_List.add(queen_white);
         Rook rook_white_1 = new Rook(true, squares.get(7).get(0).getLocation());
@@ -260,8 +253,8 @@ public class Board extends JFrame implements MouseListener {
 
         //Declares and puts the black pieces in the Piece List
 
-        King king_black = new King(false, squares.get(0).get(4).getLocation());
-        Piece_List.add(king_black);
+        KingB = new King(false, squares.get(0).get(4).getLocation());
+        Piece_List.add(KingB);
         Queen queen_black = new Queen(false, squares.get(0).get(3).getLocation());
         Piece_List.add(queen_black);
         Rook rook_black_1 = new Rook(false, squares.get(0).get(0).getLocation());
@@ -311,10 +304,15 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
+
+        // Declares legal moves in the starting position
         legal_moves = analyze_legal_moves(false);
+        //adds the starting Position to an ArrayList of FENs to check for threefold repetition
         ProcessFEN();
     }
 
+
+    //gets the first Index in ArrayList.get(i).get(i) for Pieces
     public int getArray(Piece piece) {
         int array = -1;
         for (ArrayList<Square> i : squares) {
@@ -330,6 +328,7 @@ public class Board extends JFrame implements MouseListener {
         return (array);
     }
 
+    //gets the first Index in ArrayList.get(i).get(i) for Squares
     public int getArray(Square square) {
         int array = -1;
         for (ArrayList<Square> i : squares) {
@@ -341,6 +340,7 @@ public class Board extends JFrame implements MouseListener {
         return (array);
     }
 
+    //gets the second Index in ArrayList.get(i).get(i) for Pieces
     public int getIndex(Piece piece) {
 
         int index = -1;
@@ -357,6 +357,7 @@ public class Board extends JFrame implements MouseListener {
         return (index);
     }
 
+    //gets the second Index in ArrayList.get(i).get(i) for squares
     public int getIndex(Square square) {
         int index = -1;
         for (ArrayList<Square> i : squares) {
@@ -368,6 +369,7 @@ public class Board extends JFrame implements MouseListener {
         return (index);
     }
 
+    //checks if a piece is loacated on a certain square
     public Piece getPieceOnSquare(int Array, int Index){
         for(Piece i:Piece_List){
             if(i.isVisible()) {
@@ -379,6 +381,7 @@ public class Board extends JFrame implements MouseListener {
         return null;
     }
 
+    //gets triggerd if a pawn reaches the 8. (squares.get(0)) or 1. (squares.get(7)) rank
     public void Promotion(){
 
         PromotedPiece = (Piece)selected_Piece;
@@ -394,15 +397,22 @@ public class Board extends JFrame implements MouseListener {
         PromotionMenu.BishopButton.addMouseListener(this);
 
 
-        //PromotionMenu  = new PromotionMenu(Turn_w);
-        //board.add(PromotionMenu, JLayeredPane.DRAG_LAYER);
-        //PromotionMenu.setOpaque(true);
-        //PromotionMenu.setLocation(board.getWidth()/4-4,board.getHeight()/2-50);
-        //PromotionMenu.setVisible(true);
 
     }
 
+    /*gets a part of the FEN for a position:
 
+    The Method begins by analyzing the 8. Rank (squares.get(0))
+    If there is a piece on a square, it adds a letter to the FEN-String:
+    K King ; B Bishop; N Knight ; Q Queen; P Pawn ; R Rook;
+    If the piece in question is white, the Letter is uppercase
+    if the piece is black, the letter is lowercase
+    If there is no Piece on the square, the int BlankSquares gets larger by one
+    If BlankSquares > 0 when a Piece gets is on a Square, the value of BlankSquares gets added, before the letter to indicate how many squares didn't have a Piece before it
+    If a whole rank is empty, BlankSquares gets written down at the end.
+    If the Method analyzes a new Rank, it adds a / to the FEN. At the end a w is added if it's whites turn and a b gets added if it's blacks turn
+
+     */
     public String getFEN(){
         String FEN = "";
         int BlankSquares = 0;
@@ -501,6 +511,8 @@ public class Board extends JFrame implements MouseListener {
         return FEN;
     }
 
+    //Adds FENs to ReachedPositions and updates the number of times the position was reached in NumberOfTimesPositionWasReached
+    //If a position was reached 3 times, ThreefoldRepeition() is triggerd
     public void ProcessFEN(){
         String FEN = getFEN();
         if(ReachedPositions.contains(FEN)){
@@ -514,6 +526,7 @@ public class Board extends JFrame implements MouseListener {
             NumberOfTimesPositionWasReached.add(1);
         }
     }
+    //Checks if certain moves would put the King in check, and if so removes them (E.g. Piece infront of the king moving, blundering the king)
     public void CheckPinsBlocks() {
         if (Turn_w) {
             for (Piece i : Piece_List_W) {
@@ -552,6 +565,8 @@ public class Board extends JFrame implements MouseListener {
         }
     }
 
+    //Checks if the King is in Check and if so Checks if it's checkmate
+    //It also removes moves of the King which would put the King in check
     public void Check_for_Checks() {
         boolean brk = false;
         King king = null;
@@ -576,8 +591,8 @@ public class Board extends JFrame implements MouseListener {
         for (Square i : Unsafe_Squares_for_King_1d) {
             if (Objects.equals(i.getLocation().toString(), king.getLocation().toString())) {
                 Check = true;
-                System.out.println("CHECK!");
-                Check_Checkmate();
+                king.setCheck(true);
+                Check_Checkmate_Stalemate();
                 brk = true;
                 break;
 
@@ -604,11 +619,12 @@ public class Board extends JFrame implements MouseListener {
                 }
                 CastlingPossible = true;
             }
+            Check_Checkmate_Stalemate();
         }
     }
 
-
-    public void Check_Checkmate() {
+//Checks if a side has legal moves, and if not declares Checkmate or Stalemate
+    public void Check_Checkmate_Stalemate() {
         System.out.println(legal_moves.get(0));
         for (ArrayList<Square> i : legal_moves) {
             if (!i.isEmpty()) {
@@ -636,6 +652,7 @@ public class Board extends JFrame implements MouseListener {
         System.out.println("Threefold repetition");
     }
 
+    //analyzes the straight moves of queens and rooks
     public ArrayList<Square> analyze_straight_moves(Piece piece, Boolean prot) {
         ArrayList<Square> legal_moves = new ArrayList<>();
         //Downwards
@@ -727,10 +744,11 @@ public class Board extends JFrame implements MouseListener {
         return legal_moves;
     }
 
+    //analyzes the diagonal moves of bishops and queens
     public ArrayList<Square> analyze_diagonal_moves(Piece piece, Boolean prot) {
         ArrayList<Square> legal_moves = new ArrayList<>();
 
-        // down left
+        // up left
         for (int i = 1; i < 8; i++) {
             boolean brk = false;
 
@@ -761,7 +779,7 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
-        // up right
+        // down right
         for (int i = 1; i < 8; i++) {
             boolean brk = false;
 
@@ -792,7 +810,7 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
-        //down right
+        //down left
         for (int i = 1; i < 8; i++) {
             boolean brk = false;
 
@@ -823,7 +841,7 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
-        //down left
+        //up right
         for (int i = 1; i < 8; i++) {
             boolean brk = false;
 
@@ -853,7 +871,6 @@ public class Board extends JFrame implements MouseListener {
                 break;
             }
         }
-        //System.out.println(legal_moves);
         return legal_moves;
 
     }
@@ -867,7 +884,7 @@ public class Board extends JFrame implements MouseListener {
         return legal_moves;
     }
 
-
+//analyzes the legal moves of a pawn
     public ArrayList<Square> analyze_pawn_moves(Pawn pawn, boolean prot) {
         ArrayList<Square> legal_moves = new ArrayList<>();
         //If pawn is white
@@ -963,7 +980,9 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
+
         if (!prot) {
+            //En Passant white
             if (getIndex(pawn) - 1 != -1) {
                 for (Piece j : Piece_List) {
                     if (Objects.equals(j.getLocation().toString(), squares.get(getArray(pawn)).get(getIndex(pawn) - 1).getLocation().toString())) {
@@ -978,6 +997,7 @@ public class Board extends JFrame implements MouseListener {
                 }
             }
 
+            //En Passant black
             if (getIndex(pawn) + 1 != 8) {
                 for (Piece j : Piece_List) {
                     if (Objects.equals(j.getLocation().toString(), squares.get(getArray(pawn)).get(getIndex(pawn) + 1).getLocation().toString())) {
@@ -1018,6 +1038,7 @@ public class Board extends JFrame implements MouseListener {
         return legal_moves;
     }
 
+    //analyzes the knights moves
     public ArrayList<Square> analyze_knight_moves(Knight knight, boolean prot) {
         ArrayList<Square> legal_moves = new ArrayList<>();
 
@@ -1134,6 +1155,7 @@ public class Board extends JFrame implements MouseListener {
         return legal_moves;
     }
 
+    //analyzes if Kingside castleing is possible
     public boolean KingSideCastlingPossible(boolean colour) {
         boolean CastlingPossible = true;
         ArrayList<Square> Unsafe_Squares_for_King_1d = convert_to_1d(Unsafe_Squares_for_King);
@@ -1186,7 +1208,7 @@ public class Board extends JFrame implements MouseListener {
 
         return CastlingPossible;
     }
-
+//Analyzes if QueensideCastleing is possible
     public boolean QueenSideCastlingPossible(boolean colour) {
         boolean CastlingPossible = true;
         ArrayList<Square> Unsafe_Squares_for_King_1d = convert_to_1d(Unsafe_Squares_for_King);
@@ -1239,6 +1261,7 @@ public class Board extends JFrame implements MouseListener {
         return CastlingPossible;
     }
 
+    //analyzes the legal moves of a king
     public ArrayList<Square> analyze_king_moves(King king, boolean prot) {
         ArrayList<Square> legal_moves = new ArrayList<>();
 
@@ -1341,6 +1364,7 @@ public class Board extends JFrame implements MouseListener {
         return legal_moves;
     }
 
+    //Gets one sides pieces as input and outputs their legal moves in an arraylist
     public ArrayList<ArrayList<Square>> analyze_legal_moves(boolean prot) {
         ArrayList<ArrayList<Square>> legal_moves = new ArrayList<>();
         if (Turn_w && !prot || !Turn_w && prot) {
@@ -1405,6 +1429,7 @@ public class Board extends JFrame implements MouseListener {
         return legal_moves;
     }
 
+    //Converts 2d ArrayLists to 1d
     public ArrayList<Square> convert_to_1d(ArrayList<ArrayList<Square>> array) {
         ArrayList<Square> legal_moves = new ArrayList<>();
         if (array != null) {
@@ -1415,6 +1440,8 @@ public class Board extends JFrame implements MouseListener {
         return legal_moves;
     }
 
+    //Analyzes the future moves of a piece from the perspective of a rook/queen:
+    //-> If the rook/queen gives check because the piece moved the given move is removed
     public boolean analyze_straight_future_moves(Piece piece, Piece piece_to_be_moved, int destination_index, int destination_array) {
         boolean safe = true;
 
@@ -1519,6 +1546,8 @@ public class Board extends JFrame implements MouseListener {
         return safe;
     }
 
+    //Analyzes the future moves of a piece from the perspective of a bishop/queen:
+    //-> If the queen/bishop gives check because the piece moved the given move is removed
     public boolean analyze_diagonal_future_moves(Piece piece, Piece piece_to_be_moved, int destination_index, int destination_array) {
         ArrayList<Square> legal_moves = new ArrayList<>();
         boolean safe = true;
@@ -1527,7 +1556,7 @@ public class Board extends JFrame implements MouseListener {
             return safe;
         }
 
-        // down left
+        // up left
         for (int i = 1; i < 8; i++) {
             if (getArray(piece) - i == destination_array && getIndex(piece) - i == destination_index) {
                 break;
@@ -1553,7 +1582,7 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
-        // up right
+        // down right
         for (int i = 1; i < 8; i++) {
             if (getArray(piece) + i == destination_array && getIndex(piece) + i == destination_index) {
                 break;
@@ -1579,7 +1608,7 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
-        //down right
+        //down left
         for (int i = 1; i < 8; i++) {
             if (getArray(piece) + i == destination_array && getIndex(piece) - i == destination_index) {
                 break;
@@ -1605,7 +1634,7 @@ public class Board extends JFrame implements MouseListener {
             }
         }
 
-        //down left
+        //up right
         for (int i = 1; i < 8; i++) {
             if (getArray(piece) - i == destination_array && getIndex(piece) + i == destination_index) {
                 break;
@@ -1634,7 +1663,8 @@ public class Board extends JFrame implements MouseListener {
 
     }
 
-
+//analyzes future knight moves:
+// If a piece doesn't prevent a knight check by moving, the move is removed
     public boolean analyzeFutureKnightMoves(Piece piece, Piece piece_to_be_moved, int destination_index, int destination_array){
         boolean safe = true;
 
@@ -1738,6 +1768,9 @@ public class Board extends JFrame implements MouseListener {
 
         return safe;
     }
+
+    //analyzes future pawn moves:
+// If a piece doesn't prevent a pawn check by moving, the move is removed
     public boolean analyzeFuturePawnMoves(Piece piece, Piece piece_to_be_moved, int destination_index, int destination_array) {
         boolean safe = true;
 
@@ -1797,6 +1830,7 @@ public class Board extends JFrame implements MouseListener {
     }
 
 
+    //gets the every possible move of one side as input and outputs all legal ones
     public boolean analyze_future_moves(Piece piece, int origin_index, int origin_array, int destination_index, int destination_array) {
         boolean safe = true;
         if (Turn_w) {
@@ -1890,6 +1924,7 @@ public class Board extends JFrame implements MouseListener {
         return safe;
     }
 
+    //selects a piece
     public void select_piece(Piece piece) {
         if (piece.getcolour() == Turn_w) {
 
@@ -1897,6 +1932,7 @@ public class Board extends JFrame implements MouseListener {
         }
     }
 
+    //is triggered when selected_piece != null
     public void capture_or_change_piece(Piece piece) {
 
         if (((Piece) selected_Piece).getcolour() != ((piece).getcolour())) {
@@ -1948,6 +1984,8 @@ public class Board extends JFrame implements MouseListener {
 
                     selected_Piece = null;
                     Turn_w = !Turn_w;
+                    KingW.setCheck(false);
+                    KingB.setCheck(false);
                 if(PromotedPiece == null) {
                     legal_moves = analyze_legal_moves(false);
                     CheckPinsBlocks();
@@ -1962,6 +2000,7 @@ public class Board extends JFrame implements MouseListener {
 
         }
     }
+    //makes pieces move if no capture occurs
         public void move(Square square){
             boolean moved = false;
             if (Turn_w && selected_Piece != null) {
@@ -2061,6 +2100,8 @@ public class Board extends JFrame implements MouseListener {
                 CastlingPossible = false;
                 Turn_w = !Turn_w;
                 ProcessFEN();
+                KingW.setCheck(false);
+                KingB.setCheck(false);
                 if(PromotedPiece == null) {
                     legal_moves = analyze_legal_moves(false);
                     CheckPinsBlocks();
@@ -2172,6 +2213,8 @@ public class Board extends JFrame implements MouseListener {
 
         else{
             Check = false;
+
+
             System.out.println(selected_Piece);
             if (e.getComponent() instanceof Piece) {
                 if (selected_Piece != e.getComponent()) {
